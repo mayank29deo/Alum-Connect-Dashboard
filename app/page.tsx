@@ -277,12 +277,11 @@ export default function AdminDashboard() {
           {/* Social proof chips */}
           <div className="flex flex-wrap justify-center gap-3 mt-10">
             {[
-              "🎓 IITians & NITians",
+              "🎓 IITians",
+              "🏫 NITians",
+              "💻 IIITians",
               "🩺 AIIMS Doctors",
-              "🏛️ IAS Officers",
-              "📈 IIM MBAs",
-              "⚖️ NLU Lawyers",
-              "💼 CA & Finance",
+              "🏥 State Govt. Doctors",
             ].map((tag) => (
               <span
                 key={tag}
