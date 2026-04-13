@@ -71,6 +71,7 @@ export default function AdminDashboard() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const [copyDone, setCopyDone] = useState(false);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
 
   const fetchAlumni = useCallback(async () => {
     setLoading(true);
@@ -188,54 +189,124 @@ export default function AdminDashboard() {
     rejected: alumni.filter((a) => a.status === "rejected").length,
   };
 
-  // ── LOGIN ──
+  // ── LANDING ──
   if (!authed) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="w-full max-w-sm bg-white rounded-3xl border border-gray-100 shadow-xl p-8">
-          <div className="flex flex-col items-center mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 flex items-center justify-center mb-3 shadow-lg shadow-orange-200">
-              <Sparkles className="w-6 h-6 text-white" />
+      <div className="min-h-screen bg-[#FFFAF7] flex flex-col">
+        {/* Navbar */}
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-orange-400 flex items-center justify-center shadow-md">
+              <Sparkles className="w-4 h-4 text-white" />
             </div>
-            <h1 className="text-xl font-extrabold text-gray-900">
-              AlumConnect Admin
-            </h1>
-            <p className="text-sm text-gray-400 mt-1">Chief of Staff Dashboard</p>
+            <div className="leading-tight">
+              <p className="text-[10px] font-bold text-orange-500 uppercase tracking-widest">Vedantu</p>
+              <p className="text-sm font-extrabold text-gray-900">AlumConnect</p>
+            </div>
+          </div>
+          {/* Subtle admin trigger */}
+          <button
+            onClick={() => setShowAdminLogin((v) => !v)}
+            className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors"
+          >
+            <Lock className="w-3 h-3" />
+            Admin
+          </button>
+        </div>
+
+        {/* Admin login dropdown */}
+        {showAdminLogin && (
+          <div className="mx-auto w-full max-w-sm px-4 mb-2">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-5 space-y-3">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Admin Access</p>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="password"
+                  placeholder="Enter admin password"
+                  value={pw}
+                  onChange={(e) => setPw(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                  autoFocus
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border rounded-xl focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all ${
+                    pwError ? "border-red-400 bg-red-50" : "border-gray-200"
+                  }`}
+                />
+              </div>
+              {pwError && (
+                <p className="text-xs text-red-500 flex items-center gap-1.5">
+                  <AlertTriangle className="w-3 h-3" /> Incorrect password.
+                </p>
+              )}
+              <button onClick={handleLogin} className="w-full btn-orange py-2.5 rounded-xl text-sm">
+                Enter Dashboard
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Hero */}
+        <div className="flex-1 flex flex-col items-center justify-center px-4 text-center pb-16">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 text-xs font-bold px-4 py-2 rounded-full border border-orange-200 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+            Vedantu Alumni Network — Now Open
           </div>
 
-          <div className="space-y-3">
-            <div className="relative">
-              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="password"
-                placeholder="Enter admin password"
-                value={pw}
-                onChange={(e) => setPw(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-                className={`w-full pl-10 pr-4 py-3 text-sm bg-gray-50 border rounded-xl focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all ${
-                  pwError ? "border-red-400 bg-red-50" : "border-gray-200"
-                }`}
-              />
-            </div>
-            {pwError && (
-              <p className="text-xs text-red-500 flex items-center gap-1.5">
-                <AlertTriangle className="w-3 h-3" /> Incorrect password. Try again.
-              </p>
-            )}
-            <button
-              onClick={handleLogin}
-              className="w-full btn-orange py-3 rounded-xl text-sm"
-            >
-              Enter Dashboard
-            </button>
-          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-5 max-w-2xl">
+            You made it. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-400">
+              Now help the next one.
+            </span>
+          </h1>
 
-          <p className="text-center text-xs text-gray-400 mt-5">
-            Alumni?{" "}
-            <a href="/onboard" className="text-orange-500 font-semibold hover:underline">
-              Register here →
-            </a>
+          <p className="text-lg text-gray-500 max-w-xl mb-10 leading-relaxed">
+            You studied on Vedantu. You cracked the exam. You built a career.
+            Now take 3 minutes to register — and become the mentor you wish you had.
           </p>
+
+          {/* Primary CTA */}
+          <a
+            href="/onboard"
+            className="btn-orange text-base px-10 py-4 rounded-2xl shadow-xl shadow-orange-200 mb-4"
+          >
+            Register as a Mentor — It&apos;s Free →
+          </a>
+          <p className="text-xs text-gray-400">Takes 3 minutes · No commitment · 100% free</p>
+
+          {/* Social proof chips */}
+          <div className="flex flex-wrap justify-center gap-3 mt-10">
+            {[
+              "🎓 IITians & NITians",
+              "🩺 AIIMS Doctors",
+              "🏛️ IAS Officers",
+              "📈 IIM MBAs",
+              "⚖️ NLU Lawyers",
+              "💼 CA & Finance",
+            ].map((tag) => (
+              <span
+                key={tag}
+                className="text-sm font-medium bg-white border border-orange-100 text-gray-600 px-4 py-2 rounded-full shadow-sm"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Steps */}
+          <div className="grid sm:grid-cols-3 gap-4 mt-14 max-w-2xl w-full">
+            {[
+              { step: "01", title: "Fill the form", desc: "Share your Vedantu journey, college, and where you are now. Takes 3 minutes." },
+              { step: "02", title: "Get verified", desc: "Our team reviews and approves your profile within 1–2 days." },
+              { step: "03", title: "Start mentoring", desc: "Learners book sessions with you. Guide them the way you wish someone guided you." },
+            ].map((s) => (
+              <div key={s.step} className="bg-white rounded-2xl border border-orange-100 p-5 text-left shadow-sm">
+                <span className="text-xs font-extrabold text-orange-400 tracking-widest">STEP {s.step}</span>
+                <h3 className="font-bold text-gray-900 mt-2 mb-1">{s.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
