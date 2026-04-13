@@ -38,7 +38,7 @@ export interface AlumniProfile {
   college_year_of_passing?: number;
 
   current_company?: string;
-  current_role?: string;
+  current_designation?: string;
   current_city?: string;
   field: string;
   specialization?: string;

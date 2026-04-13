@@ -104,7 +104,7 @@ const EMPTY: AlumniProfile = {
   degree: "",
   college_year_of_passing: undefined,
   current_company: "",
-  current_role: "",
+  current_designation: "",
   current_city: "",
   field: "",
   specialization: "",
@@ -576,8 +576,8 @@ export default function OnboardPage() {
                 <input
                   className={inputCls}
                   placeholder="Software Engineer / Resident Doctor / IAS Officer"
-                  value={form.current_role}
-                  onChange={(e) => set("current_role", e.target.value)}
+                  value={form.current_designation}
+                  onChange={(e) => set("current_designation", e.target.value)}
                 />
               </Field>
               <Field label="Current Company / Organisation">

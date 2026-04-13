@@ -132,7 +132,7 @@ export default function AdminDashboard() {
       a.full_name, a.email, a.phone ?? "", a.status ?? "",
       a.field, a.college_name, a.degree,
       a.college_year_of_passing ?? "", a.current_company ?? "",
-      a.current_role ?? "", a.current_city ?? "", a.specialization ?? "",
+      a.current_designation ?? "", a.current_city ?? "", a.specialization ?? "",
       a.exam_cleared ?? "", a.rank_or_result ?? "",
       a.vedantu_study_years, a.vedantu_classes,
       (a.vedantu_subjects ?? []).join("; "),
@@ -710,7 +710,7 @@ export default function AdminDashboard() {
                   title: "Current Status",
                   rows: [
                     ["Field", selected.field],
-                    ["Role", selected.current_role],
+                    ["Role", selected.current_designation],
                     ["Company", selected.current_company],
                     ["City", selected.current_city],
                     ["Specialization", selected.specialization],
