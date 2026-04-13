@@ -1,18 +1,18 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Called only at runtime (client-side), never at build time
+// Called lazily — never at module load time
 export function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+
+  // Gracefully skip init if env vars aren't set yet (local dev without Supabase)
+  if (!url.startsWith("http")) {
+    console.warn("Supabase not configured — set NEXT_PUBLIC_SUPABASE_URL in .env.local");
+    return null as unknown as ReturnType<typeof createClient>;
+  }
+
   return createClient(url, key);
 }
-
-// Convenience singleton for client-side usage
-export const supabase =
-  typeof window !== "undefined"
-    ? getSupabase()
-    : // Return a dummy during SSR/build — pages are "use client" so this never runs
-      (null as unknown as ReturnType<typeof getSupabase>);
 
 export type AlumniStatus = "pending" | "approved" | "rejected";
 
@@ -63,6 +63,8 @@ export async function submitAlumniProfile(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const client = getSupabase();
+    if (!client) throw new Error("Supabase not configured.");
+
     let profile_photo_url: string | undefined;
 
     if (photoFile) {

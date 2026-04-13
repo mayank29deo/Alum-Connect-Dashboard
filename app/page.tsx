@@ -72,7 +72,9 @@ export default function AdminDashboard() {
 
   const fetchAlumni = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await getSupabase()
+    const client = getSupabase();
+    if (!client) { setLoading(false); return; }
+    const { data, error } = await client
       .from("alumni_profiles")
       .select("*")
       .order("created_at", { ascending: false });
@@ -95,7 +97,9 @@ export default function AdminDashboard() {
 
   const updateStatus = async (id: string, status: AlumniStatus) => {
     setActionLoading(id + status);
-    const { error } = await getSupabase()
+    const client = getSupabase();
+    if (!client) { setActionLoading(null); return; }
+    const { error } = await client
       .from("alumni_profiles")
       .update({
         status,
