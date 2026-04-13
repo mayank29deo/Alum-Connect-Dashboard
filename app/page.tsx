@@ -44,7 +44,9 @@ const STATUS_CONFIG: Record<
   },
 };
 
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_SECRET ?? "vedantu_admin_2026";
+const ADMIN_PASSWORD =
+  (typeof process !== "undefined" && process.env.NEXT_PUBLIC_ADMIN_SECRET) ||
+  "vedantu_admin_2026";
 
 function initials(name: string) {
   return name
